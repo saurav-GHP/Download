@@ -21,7 +21,7 @@ text-align:center;
 overflow-x:hidden;
 }
 
-/* PARTICLES */
+/* PARTICLE BACKGROUND */
 
 #particles{
 position:fixed;
@@ -36,7 +36,7 @@ z-index:-1;
 
 header{
 padding:25px;
-border-bottom:2px solid #00ffea;
+border-bottom:2px solid #00fff7;
 }
 
 .container{
@@ -58,22 +58,7 @@ margin-top:20px;
 
 .team p{
 margin:5px;
-}
-
-/* SCREENSHOTS */
-
-.screenshots{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:15px;
-margin-top:20px;
-}
-
-.screenshots img{
-width:300px;
-max-width:90%;
-border-radius:10px;
+font-size:18px;
 }
 
 /* NEON BUTTON */
@@ -127,12 +112,25 @@ animation:spin 1s linear infinite;
 100%{transform:rotate(360deg);}
 }
 
+/* FOOTER */
+
+footer{
+margin-top:40px;
+padding:15px;
+background:#020617;
+font-size:14px;
+}
+
 /* MOBILE */
 
 @media(max-width:600px){
 
 .neon-btn{
 width:90%;
+}
+
+.team p{
+font-size:16px;
 }
 
 }
@@ -156,9 +154,12 @@ width:90%;
 <h2>About the Game</h2>
 
 <p>
-This project is based on the TPS Demo from Godot Engine.
-Our team modified the original demo to learn game development
-and create our own improved version.
+This game is developed by our team. The game is currently under development
+and may contain future updates and improvements. The official release on
+Google Play Store and BlueStacks Store will be coming soon after the
+development is completed.
+<br><br>
+Thank you!
 </p>
 
 <h2>Team</h2>
@@ -173,18 +174,6 @@ and create our own improved version.
 <p>Aniyu</p>
 
 <p><b>Computer Teacher:</b> Mr Shambhu Sir</p>
-
-</div>
-
-<h2>Screenshots</h2>
-
-<div class="screenshots">
-
-<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot1.png">
-
-<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot2.png">
-
-<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot3.png">
 
 </div>
 
@@ -206,6 +195,10 @@ Download Game
 <div class="loader"></div>
 
 </div>
+
+<footer>
+Website created by Saurav Kushwaha & Team
+</footer>
 
 <script>
 
