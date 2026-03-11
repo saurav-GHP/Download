@@ -1,64 +1,283 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>My Game Download</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TPS Demo - Team Project</title>
 
 <style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+}
+
 body{
-    font-family: Arial;
-    text-align: center;
-    background-color: #f2f2f2;
+background:#020617;
+color:white;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* PARTICLES */
+
+#particles{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* HEADER */
+
+header{
+padding:25px;
+border-bottom:2px solid #00ffea;
 }
 
 .container{
-    margin-top: 80px;
+max-width:1000px;
+margin:auto;
+padding:20px;
 }
 
-button{
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    margin: 10px;
+/* GAME BOX */
+
+.game-box{
+background:#0f172a;
+padding:25px;
+border-radius:12px;
+margin-top:20px;
 }
 
-button:hover{
-    background-color: #45a049;
+/* TEAM */
+
+.team p{
+margin:5px;
 }
+
+/* SCREENSHOTS */
+
+.screenshots{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:15px;
+margin-top:20px;
+}
+
+.screenshots img{
+width:300px;
+max-width:90%;
+border-radius:10px;
+}
+
+/* NEON BUTTON */
+
+.neon-btn{
+margin-top:20px;
+padding:15px 45px;
+font-size:20px;
+color:#00fff7;
+background:transparent;
+border:2px solid #00fff7;
+border-radius:10px;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 0 10px #00fff7,0 0 20px #00fff7 inset;
+}
+
+.neon-btn:hover{
+background:#00fff7;
+color:#000;
+box-shadow:0 0 20px #00fff7,0 0 40px #00fff7;
+}
+
+/* LOADING SCREEN */
+
+#loading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#000;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:1000;
+}
+
+.loader{
+border:6px solid #222;
+border-top:6px solid #00fff7;
+border-radius:50%;
+width:60px;
+height:60px;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+.neon-btn{
+width:90%;
+}
+
+}
+
 </style>
-
 </head>
 
 <body>
 
+<canvas id="particles"></canvas>
+
+<header>
+<h1>TPS Demo Game</h1>
+<p>Modified by Our Team</p>
+</header>
+
 <div class="container">
 
-<h1>My Game Website</h1>
+<div class="game-box">
 
-<p><b>Name:</b> Saurav Kushwaha from GHP</p>
-<p><b>Class:</b> 9 Venus</p>
-<p><b>Teacher:</b> Mr Shambhu Sir</p>
+<h2>About the Game</h2>
 
-<h2>You can download my game for free</h2>
+<p>
+This project is based on the TPS Demo from Godot Engine.
+Our team modified the original demo to learn game development
+and create our own improved version.
+</p>
 
-<h3>Download Options</h3>
+<h2>Team</h2>
 
-<a href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip">
-<button>Download Option 1</button>
-</a>
+<div class="team">
 
-<a href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip">
-<button>Download Option 2</button>
-</a>
+<p><b>Leader:</b> Saurav Kushwaha</p>
+<p>Saurav</p>
+<p>Kartabya</p>
+<p>Sujan</p>
+<p>Krishna</p>
+<p>Aniyu</p>
 
-<a href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip">
-<button>Download Option 3</button>
-</a>
+<p><b>Computer Teacher:</b> Mr Shambhu Sir</p>
 
 </div>
+
+<h2>Screenshots</h2>
+
+<div class="screenshots">
+
+<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot1.png">
+
+<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot2.png">
+
+<img src="https://raw.githubusercontent.com/godotengine/tps-demo/master/screenshots/screenshot3.png">
+
+</div>
+
+<h2>Download Game</h2>
+
+<p>Downloads: <span id="count">0</span></p>
+
+<button class="neon-btn" onclick="startDownload()">
+Download Game
+</button>
+
+</div>
+
+</div>
+
+<div id="loading">
+
+<h2>Preparing Download...</h2>
+<div class="loader"></div>
+
+</div>
+
+<script>
+
+/* DOWNLOAD COUNTER */
+
+let count=localStorage.getItem("downloads")||0;
+document.getElementById("count").innerText=count;
+
+function startDownload(){
+
+count++;
+localStorage.setItem("downloads",count);
+document.getElementById("count").innerText=count;
+
+document.getElementById("loading").style.display="flex";
+
+setTimeout(function(){
+
+window.location.href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip";
+
+},3000);
+
+}
+
+/* PARTICLE BACKGROUND */
+
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+
+for(let i=0;i<100;i++){
+
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+d:Math.random()*1
+});
+
+}
+
+function draw(){
+
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00fff7";
+
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fill();
+
+p.y+=p.d;
+
+if(p.y>canvas.height){
+p.y=0;
+p.x=Math.random()*canvas.width;
+}
+
+});
+
+requestAnimationFrame(draw);
+
+}
+
+draw();
+
+</script>
 
 </body>
 </html>
