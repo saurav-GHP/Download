@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TPS Demo Game</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:#00ff9c;
+font-family:monospace;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* MATRIX BACKGROUND */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* LOGIN */
+
+#loginScreen{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:1000;
+}
+
+input{
+padding:10px;
+margin:10px;
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+}
+
+button{
+padding:10px 20px;
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+cursor:pointer;
+}
+
+button:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* MAIN */
+
+#main{
+display:none;
+padding:20px;
+max-width:850px;
+margin:auto;
+}
+
+/* GLITCH TITLE */
+
+.glitch{
+font-size:40px;
+animation:glitch 1s infinite;
+}
+
+@keyframes glitch{
+0%{text-shadow:2px 2px #0ff;}
+25%{text-shadow:-2px -2px #0f0;}
+50%{text-shadow:2px -2px #0ff;}
+75%{text-shadow:-2px 2px #0f0;}
+100%{text-shadow:2px 2px #0ff;}
+}
+
+/* INSTALL BUTTON */
+
+.download{
+border:2px solid #00ff9c;
+padding:15px 30px;
+display:inline-block;
+margin-top:25px;
+cursor:pointer;
+box-shadow:0 0 10px #00ff9c;
+transition:0.3s;
+}
+
+.download:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* DESCRIPTION */
+
+.description{
+margin-top:30px;
+line-height:1.6;
+text-align:left;
+}
+
+/* HACK SCREEN */
+
+#hackScreen{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+z-index:2000;
+}
+
+/* TERMINAL */
+
+#terminal{
+text-align:left;
+padding:20px;
+}
+
+/* PROGRESS BAR */
+
+#progressBox{
+width:80%;
+height:20px;
+border:1px solid #00ff9c;
+margin:auto;
+}
+
+#progress{
+height:100%;
+width:0%;
+background:#00ff9c;
+}
+
+#speed{
+margin-top:10px;
+}
+
+/* BINARY STREAM */
+
+#binary{
+position:absolute;
+bottom:0;
+width:100%;
+height:50%;
+overflow:auto;
+text-align:left;
+font-size:12px;
+padding:10px;
+white-space:pre;
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+<h2>Secure Login</h2>
+
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<p>Hint: admin / 1234</p>
+
+</div>
+
+<!-- MAIN -->
+
+<div id="main">
+
+<h1 class="glitch">TPS DEMO GAME</h1>
+
+<p>Modified by Team Saurav</p>
+
+<h3>Team</h3>
+<p>Saurav Kushwaha</p>
+<p>Kartabya</p>
+<p>Sujan</p>
+<p>Krishna</p>
+<p>Aniyug</p>
+
+<p>Teacher: Mr Shambhu Sir</p>
+
+<h3>Game Info</h3>
+
+<p>Version 1.0</p>
+<p>Engine Godot</p>
+<p>Size 352 MB</p>
+<p>Status Under Development</p>
+
+<div class="download" onclick="startHack()">Install Game</div>
+
+<div class="description">
+
+<h2>About The Game</h2>
+
+<p>
+TPS Demo Game is a third-person shooter prototype developed using the Godot Engine.  
+The game explores futuristic environments including robotics laboratories and space-technology facilities.
+</p>
+
+<p>
+Players control a character from a third-person perspective while navigating spaceship interiors and advanced research complexes.
+</p>
+
+<p>
+The current build is an early development version that demonstrates core gameplay mechanics and will receive future updates with improved graphics, AI enemies, weapons, missions, and larger maps.
+</p>
+
+<p>
+This project was created by Team Saurav as a learning experiment in programming, game design, and interactive world building.
+</p>
+
+</div>
+
+</div>
+
+<!-- HACK SCREEN -->
+
+<div id="hackScreen">
+
+<div id="terminal"></div>
+
+<div id="progressBox">
+<div id="progress"></div>
+</div>
+
+<div id="speed"></div>
+
+<div id="binary"></div>
+
+</div>
+
+<!-- SOUNDS -->
+
+<audio id="typeSound" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"></audio>
+
+<audio id="keyboardLoop" src="https://assets.mixkit.co/active_storage/sfx/2524/2524-preview.mp3" loop></audio>
+
+<audio id="beep" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+
+<audio id="downloadSound" src="https://assets.mixkit.co/active_storage/sfx/2545/2545-preview.mp3"></audio>
+
+<audio id="accessVoice" src="https://assets.mixkit.co/active_storage/sfx/270/270-preview.mp3"></audio>
+
+<script>
+
+/* LOGIN */
+
+function login(){
+
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
+if(u==="admin" && p==="1234"){
+
+document.getElementById("loginScreen").style.display="none";
+document.getElementById("main").style.display="block";
+
+}else{
+
+alert("Wrong Login");
+
+}
+
+}
+
+/* MATRIX */
+
+let canvas=document.getElementById("matrix");
+let ctx=canvas.getContext("2d");
+
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+let letters="01".split("");
+let fontSize=14;
+let columns=canvas.width/fontSize;
+
+let drops=[];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff9c";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+let text=letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,35);
+
+/* HACK SCREEN */
+
+function startHack(){
+
+document.getElementById("hackScreen").style.display="block";
+
+document.getElementById("downloadSound").play();
+document.getElementById("keyboardLoop").play();
+
+let terminal=document.getElementById("terminal");
+
+let msgs=[
+
+"Connecting to secure server...",
+"Authorizing user...",
+"Access granted...",
+"Decrypting game files...",
+"Preparing download..."
+
+];
+
+let i=0;
+
+let typing=setInterval(function(){
+
+if(i<msgs.length){
+
+terminal.innerHTML+=msgs[i]+"<br>";
+
+document.getElementById("typeSound").currentTime=0;
+document.getElementById("typeSound").play();
+
+document.getElementById("beep").play();
+
+if(msgs[i]=="Access granted...")
+document.getElementById("accessVoice").play();
+
+i++;
+
+}else{
+
+clearInterval(typing);
+startProgress();
+
+}
+
+},900);
+
+/* BINARY STREAM */
+
+let binary=document.getElementById("binary");
+
+setInterval(function(){
+
+let line="";
+
+for(let i=0;i<120;i++)
+line+=Math.random()>0.5?"1":"0";
+
+binary.innerText+=line+"\n";
+
+binary.scrollTop=binary.scrollHeight;
+
+if(binary.innerText.length>9000)
+binary.innerText="";
+
+},40);
+
+}
+
+/* PROGRESS */
+
+function startProgress(){
+
+let bar=document.getElementById("progress");
+let speed=document.getElementById("speed");
+
+let p=0;
+
+let load=setInterval(function(){
+
+p++;
+
+bar.style.width=p+"%";
+
+speed.innerText="Download speed: "+(Math.random()*12+3).toFixed(2)+" MB/s";
+
+if(p>=100){
+
+clearInterval(load);
+
+speed.innerText="Extracting files...";
+
+setTimeout(downloadGame,2000);
+
+}
+
+},70);
+
+}
+
+/* DOWNLOAD */
+
+function downloadGame(){
+
+document.getElementById("keyboardLoop").pause();
+
+let link=document.createElement("a");
+
+link.href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+}
+
+</script>
+
+</body>
+</html>
