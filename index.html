@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TPS Demo Game Launcher</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:#00ff9c;
+font-family:Courier New, monospace;
+text-align:center;
+overflow-x:hidden;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* BOOT */
+
+#boot{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+/* LOGIN */
+
+#login{
+display:none;
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:999;
+}
+
+.loginBox{
+border:1px solid #00ff9c;
+padding:30px;
+box-shadow:0 0 20px #00ff9c;
+}
+
+input{
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+padding:10px;
+margin:10px;
+}
+
+button{
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+padding:10px 20px;
+cursor:pointer;
+}
+
+button:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* GLITCH */
+
+.glitch{
+font-size:40px;
+animation:glitch 1s infinite;
+}
+
+@keyframes glitch{
+0%{text-shadow:2px 0 red,-2px 0 blue;}
+50%{text-shadow:-2px 0 red,2px 0 blue;}
+100%{text-shadow:2px 0 red,-2px 0 blue;}
+}
+
+/* CARD */
+
+.card{
+background:rgba(0,0,0,0.8);
+margin:20px;
+padding:25px;
+border-radius:15px;
+border:1px solid #00ff9c;
+box-shadow:0 0 20px #00ff9c;
+}
+
+/* BUTTON */
+
+.download{
+padding:15px 40px;
+border:2px solid #00ff9c;
+cursor:pointer;
+display:inline-block;
+margin-top:20px;
+}
+
+.download:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* TERMINAL */
+
+#terminal{
+display:none;
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+text-align:left;
+padding:20px;
+z-index:998;
+}
+
+/* PROGRESS */
+
+#progressBox{
+display:none;
+}
+
+progress{
+width:80%;
+height:25px;
+}
+
+/* SLIDER */
+
+.slider{
+max-width:600px;
+margin:auto;
+overflow:hidden;
+}
+
+.slides{
+display:flex;
+animation:slide 16s infinite;
+}
+
+.slides img{
+width:600px;
+height:320px;
+object-fit:cover;
+}
+
+@keyframes slide{
+0%{transform:translateX(0)}
+25%{transform:translateX(-600px)}
+50%{transform:translateX(-1200px)}
+75%{transform:translateX(-1800px)}
+100%{transform:translateX(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<audio id="typeSound" src="https://www.soundjay.com/mechanical/keyboard-1.mp3"></audio>
+<audio id="accessSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+<audio id="downloadSound" src="https://www.soundjay.com/button/sounds/button-09.mp3"></audio>
+
+<!-- BOOT -->
+
+<div id="boot">
+<p>INITIALIZING SYSTEM...</p>
+<p>CONNECTING SERVER...</p>
+<p>AUTHENTICATION SUCCESS</p>
+</div>
+
+<!-- LOGIN -->
+
+<div id="login">
+
+<div class="loginBox">
+
+<h2>Secure Access</h2>
+
+<input id="user" placeholder="Username"><br>
+<input id="pass" type="password" placeholder="Password"><br>
+
+<button onclick="login()">Login</button>
+
+<p>Hint: admin / 1234</p>
+
+</div>
+
+</div>
+
+<canvas id="matrix"></canvas>
+
+<div id="terminal"></div>
+
+<header>
+
+<h1 class="glitch">TPS DEMO GAME</h1>
+<p>Modified by Team Saurav</p>
+
+</header>
+
+<div class="card">
+
+<h2>About Game</h2>
+
+<p>
+This game is developed by our team and modified from the TPS demo.
+The game is currently under development and may receive future updates.
+The official release on Google Play Store and BlueStacks Store will come soon.
+</p>
+
+<h2>Game Information</h2>
+
+<p><b>Version:</b> 1.0</p>
+<p><b>Engine:</b> Godot</p>
+<p><b>Size:</b> 352 MB</p>
+<p><b>Status:</b> Under Development (Early Trial)</p>
+
+<h2>Team</h2>
+
+<p>Saurav Kushwaha</p>
+<p>Kartabya</p>
+<p>Sujan</p>
+<p>Krishna</p>
+<p>Aniyug</p>
+
+<p><b>Teacher:</b> Mr Shambhu Sir</p>
+
+<h2>Game Screenshots</h2>
+
+<div class="slider">
+<div class="slides">
+
+<img src="https://images.unsplash.com/photo-1517976547714-720226b864c1?w=600" alt="Spaceship Cockpit">
+
+<img src="https://images.unsplash.com/photo-1541873676-a18131494184?w=600" alt="Spaceship Control Panel">
+
+<img src="https://godotengine.org/storage/app/uploads/public/5fb/4ab/6f0/5fb4ab6f0d7e3127632540.png" alt="TPS Demo Gameplay">
+
+<img src="https://godotengine.org/storage/app/uploads/public/5fb/4ab/8d2/5fb4ab8d21e8d098539571.png" alt="TPS Demo Shooting">
+
+</div>
+</div>
+
+<h2>Download</h2>
+
+<div class="download" onclick="startTerminal()">Install Game</div>
+
+<div id="progressBox">
+
+<p>Preparing Download...</p>
+
+<progress id="bar" value="0" max="100"></progress>
+
+</div>
+
+</div>
+
+<footer>
+
+<p>Website created by Saurav Kushwaha & Team</p>
+
+</footer>
+
+<script>
+
+/* BOOT */
+
+setTimeout(function(){
+document.getElementById("boot").style.display="none";
+document.getElementById("login").style.display="flex";
+},3000);
+
+/* LOGIN */
+
+function login(){
+
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
+if(u=="admin" && p=="1234"){
+document.getElementById("login").style.display="none";
+}else{
+alert("Access Denied");
+}
+
+}
+
+/* TERMINAL */
+
+function startTerminal(){
+
+document.getElementById("accessSound").play();
+
+let term=document.getElementById("terminal");
+
+term.style.display="block";
+
+let lines=[
+"ACCESSING GAME SERVER...",
+"CONNECTING DATABASE...",
+"VERIFYING FILES...",
+"PREPARING DOWNLOAD...",
+"ACCESS GRANTED"
+];
+
+let i=0;
+
+function type(){
+
+if(i<lines.length){
+
+let p=document.createElement("p");
+p.innerText=lines[i];
+term.appendChild(p);
+
+document.getElementById("typeSound").play();
+
+i++;
+setTimeout(type,800);
+
+}else{
+
+term.style.display="none";
+progress();
+
+}
+
+}
+
+type();
+
+}
+
+/* DOWNLOAD */
+
+function progress(){
+
+let box=document.getElementById("progressBox");
+let bar=document.getElementById("bar");
+
+box.style.display="block";
+
+let p=0;
+
+let interval=setInterval(function(){
+
+p+=5;
+bar.value=p;
+
+if(p>=100){
+
+clearInterval(interval);
+
+document.getElementById("downloadSound").play();
+
+window.location.href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip";
+
+}
+
+},200);
+
+}
+
+/* MATRIX */
+
+let canvas=document.getElementById("matrix");
+let ctx=canvas.getContext("2d");
+
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+let letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+letters=letters.split("");
+
+let fontSize=14;
+let columns=canvas.width/fontSize;
+
+let drops=[];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff9c";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+let text=letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
+drops[i]=0;
+}
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,33);
+
+</script>
+
+</body>
+</html>
