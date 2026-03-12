@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>TPS Demo Game</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:#00ff9c;
+font-family:monospace;
+text-align:center;
+overflow-x:hidden;
+}
+
+/* MATRIX BACKGROUND */
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* LOGIN SCREEN */
+
+#loginScreen{
+position:fixed;
+width:100%;
+height:100%;
+background:black;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:1000;
+}
+
+input{
+padding:10px;
+margin:10px;
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+}
+
+button{
+padding:10px 20px;
+background:black;
+border:1px solid #00ff9c;
+color:#00ff9c;
+cursor:pointer;
+}
+
+button:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* MAIN PAGE */
+
+#main{
+display:none;
+padding:20px;
+max-width:800px;
+margin:auto;
+}
+
+/* DOWNLOAD BUTTON */
+
+.download{
+border:2px solid #00ff9c;
+padding:15px 30px;
+display:inline-block;
+margin-top:20px;
+cursor:pointer;
+font-size:18px;
+}
+
+.download:hover{
+background:#00ff9c;
+color:black;
+}
+
+/* DESCRIPTION */
+
+.description{
+margin-top:30px;
+line-height:1.6;
+text-align:left;
+}
+
+/* HACK SCREEN */
+
+#hackScreen{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+color:#00ff9c;
+z-index:2000;
+}
+
+/* TERMINAL */
+
+#terminal{
+text-align:left;
+padding:20px;
+}
+
+/* PROGRESS */
+
+#progressBox{
+width:80%;
+height:20px;
+border:1px solid #00ff9c;
+margin:auto;
+}
+
+#progress{
+height:100%;
+width:0%;
+background:#00ff9c;
+}
+
+/* BINARY */
+
+#binary{
+position:absolute;
+bottom:0;
+width:100%;
+height:50%;
+overflow:auto;
+text-align:left;
+font-size:12px;
+padding:10px;
+white-space:pre;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<canvas id="matrix"></canvas>
+
+<!-- LOGIN -->
+
+<div id="loginScreen">
+
+<h2>Secure Login</h2>
+
+<input id="user" placeholder="Username">
+<input id="pass" type="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<p>Hint: admin / 1234</p>
+
+</div>
+
+<!-- MAIN PAGE -->
+
+<div id="main">
+
+<h1>TPS DEMO GAME</h1>
+
+<p>Modified by Team Saurav</p>
+
+<h3>Team</h3>
+
+<p>Saurav Kushwaha</p>
+<p>Kartabya</p>
+<p>Sujan</p>
+<p>Krishna</p>
+<p>Aniyug</p>
+
+<p>Teacher: Mr Shambhu Sir</p>
+
+<h3>Game Info</h3>
+
+<p>Version 1.0</p>
+<p>Engine Godot</p>
+<p>Size 352 MB</p>
+<p>Status Under Development</p>
+
+<div class="download" onclick="startHack()">Install Game</div>
+
+<!-- LONG GAME DESCRIPTION -->
+
+<div class="description">
+
+<h2>About The Game</h2>
+
+<p>
+TPS Demo Game is a third-person shooter prototype developed using the Godot Engine.  
+The project explores futuristic environments, advanced robotics, and space-themed gameplay mechanics. Players control a character from a third-person perspective while exploring high-tech facilities and spaceship interiors in a sci-fi universe.
+</p>
+
+<p>
+The demo focuses on testing gameplay mechanics such as player movement, camera control, exploration systems, and experimental combat mechanics. The game world is designed with a cyber-futuristic style inspired by advanced technology and deep-space environments.
+</p>
+
+<p>
+This early version demonstrates the foundation of the game. Future updates will introduce improved graphics, expanded maps, enemy AI systems, new weapons, and more advanced missions that expand the gameplay experience.
+</p>
+
+<p>
+The project is developed by Team Saurav as an experimental learning project focused on game design, programming, and creative world building.
+</p>
+
+</div>
+
+</div>
+
+<!-- HACKER DOWNLOAD SCREEN -->
+
+<div id="hackScreen">
+
+<div id="terminal"></div>
+
+<div id="progressBox">
+<div id="progress"></div>
+</div>
+
+<div id="binary"></div>
+
+</div>
+
+<script>
+
+/* LOGIN */
+
+function login(){
+
+let u=document.getElementById("user").value;
+let p=document.getElementById("pass").value;
+
+if(u==="admin" && p==="1234"){
+
+document.getElementById("loginScreen").style.display="none";
+document.getElementById("main").style.display="block";
+
+}else{
+
+alert("Wrong Login");
+
+}
+
+}
+
+/* MATRIX BACKGROUND */
+
+let canvas=document.getElementById("matrix");
+let ctx=canvas.getContext("2d");
+
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+let letters="01";
+letters=letters.split("");
+
+let fontSize=14;
+let columns=canvas.width/fontSize;
+
+let drops=[];
+
+for(let x=0;x<columns;x++)
+drops[x]=1;
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00ff9c";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+
+let text=letters[Math.floor(Math.random()*letters.length)];
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+
+}
+
+}
+
+setInterval(draw,35);
+
+/* HACK SCREEN */
+
+function startHack(){
+
+document.getElementById("hackScreen").style.display="block";
+
+let terminal=document.getElementById("terminal");
+
+let messages=[
+
+"Connecting to secure server...",
+"Authorizing user...",
+"Access granted",
+"Decrypting files...",
+"Preparing download..."
+
+];
+
+let i=0;
+
+let typing=setInterval(function(){
+
+if(i<messages.length){
+
+terminal.innerHTML+=messages[i]+"<br>";
+i++;
+
+}else{
+
+clearInterval(typing);
+startProgress();
+
+}
+
+},900);
+
+/* BINARY STREAM */
+
+let binary=document.getElementById("binary");
+
+setInterval(function(){
+
+let line="";
+
+for(let i=0;i<120;i++){
+line+=Math.random()>0.5?"1":"0";
+}
+
+binary.innerText+=line+"\n";
+
+binary.scrollTop=binary.scrollHeight;
+
+if(binary.innerText.length>9000)
+binary.innerText="";
+
+},40);
+
+}
+
+/* PROGRESS */
+
+function startProgress(){
+
+let bar=document.getElementById("progress");
+
+let p=0;
+
+let load=setInterval(function(){
+
+p++;
+
+bar.style.width=p+"%";
+
+if(p>=100){
+
+clearInterval(load);
+downloadGame();
+
+}
+
+},70);
+
+}
+
+/* DOWNLOAD */
+
+function downloadGame(){
+
+let link=document.createElement("a");
+
+link.href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip";
+
+document.body.appendChild(link);
+
+link.click();
+
+document.body.removeChild(link);
+
+}
+
+</script>
+
+</body>
+</html>
