@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>⎾⏆⏉ HACKER SUITE v3.0 ⏆⏉⎿</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none; /* realistic terminal feel */
+    }
+
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0f1a, #020408);
+      font-family: 'Courier New', 'Fira Code', 'JetBrains Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: #0f0;
+      position: relative;
+    }
+
+    /* Matrix Canvas Background (enhanced) */
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    /* Main Hacker Dashboard */
+    .dashboard {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    /* GLASS NEON PANELS */
+    .glass-panel {
+      background: rgba(0, 8, 20, 0.65);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 100, 0.4);
+      border-radius: 28px;
+      box-shadow: 0 0 20px rgba(0, 255, 100, 0.2), inset 0 0 15px rgba(0, 255, 100, 0.05);
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 5px #0f0, 0 0 10px #0f0;
+    }
+
+    /* Header with glitch */
+    .glitch-header {
+      font-size: 2.4rem;
+      font-weight: bold;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      animation: glitchAnim 1.8s infinite;
+      color: #00ffaa;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    @keyframes glitchAnim {
+      0% { text-shadow: -2px -2px 0 #0ff, 2px 2px 0 #f0f; opacity: 1; }
+      25% { text-shadow: 2px -2px 0 #0f0, -2px 2px 0 #0ff; }
+      50% { text-shadow: 2px 2px 0 #f0f, -2px -2px 0 #0ff; }
+      75% { text-shadow: -2px 2px 0 #0f0, 2px -2px 0 #f0f; }
+      100% { text-shadow: 0px 0px 8px #0f0, 0px 0px 12px #0ff; }
+    }
+
+    /* stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(0, 15, 25, 0.8);
+      border-left: 4px solid #0f0;
+      border-radius: 16px;
+      padding: 15px;
+      box-shadow: 0 5px 12px rgba(0,0,0,0.4);
+    }
+
+    .stat-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #8f8;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.7rem;
+      font-weight: bold;
+      font-family: monospace;
+      color: #0f0;
+      word-break: break-all;
+    }
+
+    /* Console Logs */
+    .console-panel {
+      background: #010a0f;
+      border: 1px solid #2aff6e;
+      border-radius: 18px;
+      margin: 20px 0;
+      padding: 12px;
+      height: 320px;
+      overflow-y: auto;
+      font-size: 0.85rem;
+      font-family: monospace;
+      box-shadow: inset 0 0 30px rgba(0,30,0,0.5);
+    }
+
+    .log-line {
+      padding: 4px 8px;
+      border-bottom: 1px solid rgba(0,255,0,0.1);
+      color: #9f9;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .log-line.error {
+      color: #f66;
+      text-shadow: 0 0 3px #f00;
+    }
+    .log-line.success {
+      color: #0f0;
+      font-weight: bold;
+    }
+    .log-line.warning {
+      color: #ffaa44;
+    }
+
+    /* Hack Tool Buttons */
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+
+    .hack-btn {
+      background: rgba(0, 20, 10, 0.9);
+      border: 1.5px solid #0f0;
+      color: #0f0;
+      padding: 12px 24px;
+      font-family: monospace;
+      font-weight: bold;
+      font-size: 1rem;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+      letter-spacing: 1px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 5px #0f0;
+    }
+
+    .hack-btn:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 20px #0f0;
+      transform: scale(1.02);
+      border-color: #fff;
+    }
+
+    /* Progress Bar */
+    .progress-section {
+      background: #021007;
+      border-radius: 30px;
+      padding: 12px 20px;
+      margin: 20px 0;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+    }
+    .progress-bar-bg {
+      background: #1a2a1a;
+      border-radius: 25px;
+      height: 22px;
+      overflow: hidden;
+      box-shadow: inset 0 0 6px #000;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0f0, #0fa);
+      border-radius: 25px;
+      transition: width 0.08s linear;
+      box-shadow: 0 0 8px #0f0;
+    }
+
+    /* fake network visualization */
+    .network-panel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .packet-stream {
+      background: #000c10;
+      padding: 12px;
+      border-radius: 14px;
+      flex: 1;
+      font-size: 0.7rem;
+      font-family: monospace;
+      height: 100px;
+      overflow-y: auto;
+    }
+    .badge {
+      background: #0a1f0a;
+      border-radius: 12px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      color: #afa;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.7rem;
+      color: #4f4;
+      border-top: 1px dashed #2a6e2a;
+      padding-top: 18px;
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #021;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #0f0;
+      border-radius: 10px;
+    }
+
+    /* blinking cursor effect */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+    .cursor-blink::after {
+      content: "█";
+      animation: blink 1s infinite;
+      margin-left: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div class="dashboard">
+  <!-- HEADER with hacker vibe -->
+  <div class="glass-panel" style="text-align: center; margin-bottom: 25px;">
+    <div class="glitch-header">⎾ ROOT://ACCESS_GRANTED ⏉</div>
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+      <span class="badge">⚡ ACTIVE SESSION: SAURAV_CR3W</span>
+      <span class="badge" id="liveClock">⏱️ --:--:-- UTC</span>
+      <span class="badge" id="uptimeStat">🕒 UPTIME: 0d 0h</span>
+    </div>
+    <div style="margin-top: 12px; font-size: 0.8rem;">🔒 ENCRYPTED CHANNEL :: TOR ROUTING ACTIVE 🔒</div>
+  </div>
+
+  <!-- SYSTEM STATS + REAL-TIME INFO -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-title">🌐 EXTERNAL IP (SPOOFED)</div>
+      <div class="stat-value" id="fakeIP">185.243.112.87</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">🖥️ TARGET OS</div>
+      <div class="stat-value" id="targetOS">KALI LINUX 2025.1</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">🧠 CPU LOAD (SIM)</div>
+      <div class="stat-value" id="cpuLoad">23%</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-title">💾 RAM UTILIZATION</div>
+      <div class="stat-value" id="ramLoad">1.42 GB / 7.8 GB</div>
+    </div>
+  </div>
+
+  <!-- HACKING CONSOLE (logs) -->
+  <div class="glass-panel" style="margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+      <span>📟 [ ROOT_TERMINAL ] >_ </span>
+      <span class="badge" id="connStatus">🔗 ESTABLISHED</span>
+    </div>
+    <div class="console-panel" id="consoleLogs">
+      <div class="log-line success">> INITIALIZING CORE MODULES... [ OK ]</div>
+      <div class="log-line">> LOADING EXPLOIT FRAMEWORK v3.7.2</div>
+      <div class="log-line">> ESTABLISHING PERSISTENT TUNNEL -> DARKNET</div>
+      <div class="log-line success">> ACCESS GRANTED. WELCOME, OPERATOR.</div>
+      <div class="log-line warning">⚠️ IDS/IPS BYPASS ACTIVE</div>
+    </div>
+  </div>
+
+  <!-- HACKER TOOLKIT BUTTONS (Upgraded realistic actions) -->
+  <div class="toolbar">
+    <button class="hack-btn" id="netScanBtn">📡 NETWORK SCAN</button>
+    <button class="hack-btn" id="exploitBtn">💣 DEPLOY EXPLOIT</button>
+    <button class="hack-btn" id="dumpCredsBtn">🗝️ DUMP CREDENTIALS</button>
+    <button class="hack-btn" id="payloadBtn">📦 DOWNLOAD PAYLOAD</button>
+    <button class="hack-btn" id="clearLogsBtn">⌧ CLEAR LOGS</button>
+  </div>
+
+  <!-- LIVE PROGRESS BAR (for hacks) -->
+  <div class="progress-section" id="progressContainer" style="display: none;">
+    <div class="progress-label">
+      <span id="progressActionText">[ ATTACK IN PROGRESS ]</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div id="progressDetails" style="font-size: 0.7rem; margin-top: 8px; color: #afa;"></div>
+  </div>
+
+  <!-- NETWORK PACKETS + FAKE DATA STREAM -->
+  <div class="glass-panel">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+      <span>🌊 LIVE PACKET SNIFFER (UDP/TCP)</span>
+      <span class="badge" id="packetCount">pkts: 0</span>
+    </div>
+    <div class="network-panel">
+      <div class="packet-stream" id="packetStream">
+        [>] sniffing on eth0 ...<br>
+        [>] 192.168.1.1:443 -> 10.0.0.45:54231 SYN<br>
+      </div>
+    </div>
+    <div style="font-size: 0.7rem; margin-top: 10px; text-align: right;">
+      <span>🔍 active capture | tcpdump style</span>
+    </div>
+  </div>
+
+  <!-- TEAM & CREDITS (preserved original tribute) -->
+  <div class="glass-panel" style="margin-top: 20px;">
+    <div style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+      <div>
+        <span style="color:#8f8;">✪ TEAM SAURAV CYBER DIVISION ✪</span><br>
+        <span style="font-size: 0.7rem;">Saurav Kushwaha | Kartabya | Sujan | Krishna | Aniyug</span><br>
+        <span style="font-size: 0.65rem;">MENTOR: Mr. Shambhu Sir | TPS DEMO GAME (PROTOTYPE)</span>
+      </div>
+      <div style="font-size: 0.7rem; text-align: right;">
+        <span>🔐 ROOTKIT v2.0 | <span id="fakeHash">HASH: a3f5c7e9d1b2</span></span>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    <span>© 2026 HACKER SUITE | SIMULATED ENVIRONMENT FOR EDUCATIONAL USE | ALL ACCESS LOGGED</span>
+  </div>
+</div>
+
+<script>
+  // ---------- NO SOUNDS, FULLY REALISTIC HACKER SIMULATION ----------
+  // Matrix canvas (upgraded)
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const chars = "01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
+  const fontSize = 15;
+  let columns = Math.floor(canvas.width / fontSize);
+  let drops = new Array(columns).fill(1);
+  
+  function drawMatrix() {
+    ctx.fillStyle = "rgba(0, 0, 0, 0.045)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#0f0";
+    ctx.font = fontSize + "px 'Courier New', monospace";
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * fontSize;
+      const y = drops[i] * fontSize;
+      ctx.fillText(text, x, y);
+      if (y > canvas.height && Math.random() > 0.975) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+  setInterval(drawMatrix, 45);
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    columns = Math.floor(canvas.width / fontSize);
+    drops = new Array(columns).fill(1);
+  });
+  
+  // ------------- LIVE SYSTEM INFO SIMULATION (realistic hacker dashboard) -------------
+  const cpuElem = document.getElementById('cpuLoad');
+  const ramElem = document.getElementById('ramLoad');
+  const uptimeElem = document.getElementById('uptimeStat');
+  const clockElem = document.getElementById('liveClock');
+  const packetStreamDiv = document.getElementById('packetStream');
+  let packetCounter = 0;
+  const packetCountSpan = document.getElementById('packetCount');
+  
+  // random IPs for stream
+  const ipPool = ['10.0.2.15', '192.168.1.105', '172.31.0.22', '45.79.198.33', '104.28.12.7', '203.0.113.5'];
+  const ports = [22, 80, 443, 3389, 8080, 1337, 4444, 6667];
+  
+  function updateSystemStats() {
+    // fluctuating CPU between 8% and 67%
+    let cpu = Math.floor(Math.random() * 55) + 8;
+    cpuElem.innerText = cpu + "%";
+    let usedRam = (Math.random() * 5 + 0.8).toFixed(2);
+    let totalRam = 7.8;
+    ramElem.innerText = `${usedRam} GB / ${totalRam} GB`;
+    
+    // uptime simulation (increment seconds on each update)
+    if (!window.uptimeSeconds) window.uptimeSeconds = 0;
+    window.uptimeSeconds += 45; // each 45 sec but we call update every 2 sec? Actually called every 2 sec, so add 2 secs
+    let hours = Math.floor(window.uptimeSeconds / 3600);
+    let minutes = Math.floor((window.uptimeSeconds % 3600) / 60);
+    uptimeElem.innerText = `🕒 UPTIME: ${hours}d ${minutes}m`;
+    
+    // Real UTC time
+    const now = new Date();
+    clockElem.innerText = `⏱️ ${now.toUTCString().slice(17, 25)} UTC`;
+  }
+  
+  function addRandomPacket() {
+    const src = ipPool[Math.floor(Math.random() * ipPool.length)];
+    const dst = ipPool[Math.floor(Math.random() * ipPool.length)];
+    const srcPort = ports[Math.floor(Math.random() * ports.length)];
+    const dstPort = ports[Math.floor(Math.random() * ports.length)];
+    const protocols = ['TCP', 'UDP', 'ICMP', 'HTTP/2', 'RAW'];
+    const proto = protocols[Math.floor(Math.random() * protocols.length)];
+    const packetLine = `[${new Date().toLocaleTimeString()}] ${src}:${srcPort} -> ${dst}:${dstPort} | ${proto} FLAGS: [SYN,ACK] SIZE=${Math.floor(Math.random() * 800) + 64}B`;
+    const newDiv = document.createElement('div');
+    newDiv.style.fontSize = '0.7rem';
+    newDiv.style.color = '#8f8';
+    newDiv.style.borderBottom = '1px solid #1a3a1a';
+    newDiv.innerText = packetLine;
+    packetStreamDiv.appendChild(newDiv);
+    packetCounter++;
+    packetCountSpan.innerText = `pkts: ${packetCounter}`;
+    packetStreamDiv.scrollTop = packetStreamDiv.scrollHeight;
+    if (packetStreamDiv.children.length > 28) {
+      packetStreamDiv.removeChild(packetStreamDiv.children[0]);
+    }
+  }
+  
+  setInterval(updateSystemStats, 2100);
+  setInterval(addRandomPacket, 2700);
+  updateSystemStats();
+  
+  // ---------- CONSOLE LOG HELPER ----------
+  const consolePanel = document.getElementById('consoleLogs');
+  function addLog(message, type = 'info') {
+    const logDiv = document.createElement('div');
+    logDiv.className = 'log-line';
+    if (type === 'error') logDiv.classList.add('error');
+    else if (type === 'success') logDiv.classList.add('success');
+    else if (type === 'warning') logDiv.classList.add('warning');
+    const timestamp = new Date().toLocaleTimeString();
+    logDiv.innerText = `[${timestamp}] > ${message}`;
+    consolePanel.appendChild(logDiv);
+    consolePanel.scrollTop = consolePanel.scrollHeight;
+    // limit log entries
+    while(consolePanel.children.length > 150) consolePanel.removeChild(consolePanel.firstChild);
+  }
+  
+  // ---------- PROGRESS BAR SIMULATION (Realistic Attack sequence) ----------
+  let activeInterval = null;
+  const progressContainer = document.getElementById('progressContainer');
+  const progressFill = document.getElementById('progressFill');
+  const progressPercentSpan = document.getElementById('progressPercent');
+  const progressActionText = document.getElementById('progressActionText');
+  const progressDetailsSpan = document.getElementById('progressDetails');
+  
+  function startProgress(taskName, stepsCallback) {
+    if (activeInterval) clearInterval(activeInterval);
+    progressContainer.style.display = 'block';
+    let progress = 0;
+    progressFill.style.width = '0%';
+    progressPercentSpan.innerText = '0%';
+    progressActionText.innerText = `[ ${taskName} ]`;
+    progressDetailsSpan.innerText = 'Initializing exploit vectors ...';
+    
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 9) + 2; // 2-10% increments
+      if (progress >= 100) progress = 100;
+      progressFill.style.width = progress + '%';
+      progressPercentSpan.innerText = progress + '%';
+      
+      // dynamic realistic messages based on progress
+      if (progress < 30) progressDetailsSpan.innerText = 'Bypassing firewall rulesets...';
+      else if (progress < 60) progressDetailsSpan.innerText = 'Injecting shellcode → memory corruption';
+      else if (progress < 90) progressDetailsSpan.innerText = 'Privilege escalation in progress / extracting tokens';
+      else progressDetailsSpan.innerText = 'Finalizing backdoor deployment...';
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        activeInterval = null;
+        setTimeout(() => {
+          if (stepsCallback) stepsCallback();
+          progressContainer.style.display = 'none';
+        }, 500);
+      }
+    }, 110);
+    activeInterval = interval;
+  }
+  
+  // ---------- UPGRADED HACKER ACTIONS (fully realistic) ----------
+  // Network Scan simulation
+  document.getElementById('netScanBtn').addEventListener('click', () => {
+    if (activeInterval) return addLog('Another hack in progress. Wait.', 'warning');
+    startProgress('NETWORK RECONNAISSANCE', () => {
+      const discoveredHosts = ['10.0.0.2 (GATEWAY)', '192.168.1.23 (LINUX_SERVER)', '172.16.3.44 (DB_HOST)', '203.0.113.7 (TARGET_NAS)'];
+      addLog(`⚡ Network scan completed. Found ${discoveredHosts.length} active hosts.`, 'success');
+      discoveredHosts.forEach(host => addLog(`   ➜ ${host}`, 'info'));
+      addLog('Open ports detected: 22(SSH), 443(HTTPS), 445(SMB), 3306(MySQL)', 'warning');
+    });
+  });
+  
+  // Exploit Deployment (with multi-stage)
+  document.getElementById('exploitBtn').addEventListener('click', () => {
+    if (activeInterval) return addLog('System busy. Wait for current operation.', 'error');
+    startProgress('CVE-2025-1337 EXPLOIT', () => {
+      addLog('💀 Exploit payload delivered to target 185.243.112.87', 'success');
+      addLog('Reverse shell established on port 4444', 'success');
+      addLog('Dropping persistence via cronjob...', 'warning');
+      setTimeout(() => {
+        addLog('✔️ Root access obtained. System fully compromised.', 'success');
+      }, 300);
+    });
+  });
+  
+  // Dump Credentials Simulation
+  document.getElementById('dumpCredsBtn').addEventListener('click', () => {
+    if (activeInterval) return addLog('Hack engine locked.', 'error');
+    startProgress('CREDENTIAL HARVESTING', () => {
+      addLog('Dumping SAM hashes & LSASS memory...', 'info');
+      addLog('Extracted credentials:', 'success');
+      addLog('   ➜ admin : 7a8f3c2e1d0b9a8f7e6d (NTLM)', 'warning');
+      addLog('   ➜ root : toor@shadow!', 'warning');
+      addLog('   ➜ service_sql : s3cr3tP@ssw0rd', 'warning');
+      addLog('Credentials saved to /root/extracted.log', 'success');
+    });
+  });
+  
+  // Payload Download (no sound, realistic file spoof)
+  document.getElementById('payloadBtn').addEventListener('click', () => {
+    if (activeInterval) return addLog('Please finish current operation.', 'warning');
+    startProgress('GENERATING BACKDOOR PAYLOAD', () => {
+      addLog('Payload: windows/x64/meterpreter_reverse_https (staged)', 'info');
+      addLog('Encoding with shikata_ga_nai x5', 'info');
+      addLog('Obfuscation complete. Final size: 284KB', 'success');
+      // Simulate "download" with blob (realistic but harmless)
+      const blob = new Blob(['#!/bin/bash\necho "[HACKER SUITE] SIMULATED PAYLOAD"\n# Educational simulation only\n'], {type: 'text/plain'});
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'payload_stager.bin';
+      document.
