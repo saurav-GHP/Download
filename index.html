@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Suite GOD MODE</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:black;color:#0f0;font-family:monospace}
+
+.screen{position:fixed;width:100%;height:100%;display:flex;justify-content:center;align-items:center;flex-direction:column}
+
+input{margin:10px;padding:10px;background:black;border:1px solid #0f0;color:#0f0}
+button{padding:10px;border:1px solid #0f0;background:black;color:#0f0}
+
+#app{display:none}
+canvas{position:fixed;width:100%;height:100%;opacity:0.25}
+
+.panel{position:relative;z-index:2;margin:10px;padding:10px;border:1px solid #0f0}
+
+.console{height:250px;overflow:auto;border:1px solid #0f0}
+.log{margin:3px}
+.success{color:#0f0}
+.warning{color:orange}
+.error{color:red}
+.manual-link{color:yellow}
+</style>
+</head>
+
+<body>
+
+<!-- BOOT -->
+<div id="boot" class="screen"><div id="bootText"></div></div>
+
+<!-- LOGIN -->
+<div id="login" class="screen" style="display:none">
+  <h2>🔐 LOGIN</h2>
+  <input id="user" placeholder="Username">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">ENTER</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+<canvas id="matrix"></canvas>
+
+<div class="panel">⎾ ROOT://ACCESS_GRANTED ⏉</div>
+<div class="panel console" id="console"></div>
+
+<div class="panel">
+  <button onclick="scan()">SCAN</button>
+  <button onclick="crack()">CRACK</button>
+  <button onclick="downloadTPS()">DOWNLOAD TPS</button>
+</div>
+</div>
+
+<script>
+// 🔊 SOUND SYSTEM (NO FILES)
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function beep(freq=400,duration=100){
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.frequency.value=freq;
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  gain.gain.setValueAtTime(0.1,audioCtx.currentTime);
+  osc.stop(audioCtx.currentTime + duration/1000);
+}
+
+// ================= BOOT =================
+const bootLines=[
+"Booting HackerOS...",
+"Loading modules...",
+"Initializing memory...",
+"Bypassing security...",
+"Access granted."
+];
+let i=0;
+function boot(){
+  if(i<bootLines.length){
+    bootText.innerHTML+=bootLines[i]+"<br>";
+    beep(300,80);
+    i++;
+    setTimeout(boot,400);
+  } else {
+    setTimeout(()=>{
+      boot.style.display="none";
+      login.style.display="flex";
+    },700);
+  }
+}
+boot();
+
+// ================= LOGIN =================
+function login(){
+  beep(600,100);
+  if(user.value==="Ghp" && pass.value==="Saurav_9845451269"){
+    login.style.display="none";
+    app.style.display="block";
+    log("ACCESS GRANTED","success");
+  } else {
+    beep(200,200);
+    alert("ACCESS DENIED");
+  }
+}
+
+// ================= MATRIX =================
+const c=document.getElementById("matrix");
+const ctx=c.getContext("2d");
+c.width=innerWidth;c.height=innerHeight;
+const chars="01ABC";
+const size=16;
+const cols=c.width/size;
+const drops=Array(Math.floor(cols)).fill(1);
+
+setInterval(()=>{
+  ctx.fillStyle="rgba(0,0,0,0.05)";
+  ctx.fillRect(0,0,c.width,c.height);
+  ctx.fillStyle="#0f0";
+  ctx.font=size+"px monospace";
+  drops.forEach((y,i)=>{
+    ctx.fillText(chars[Math.random()*chars.length|0],i*size,y*size);
+    if(y*size>c.height) drops[i]=0;
+    drops[i]++;
+  });
+},40);
+
+// ================= LOG =================
+const consoleDiv=document.getElementById("console");
+function log(msg,type=""){
+  const d=document.createElement("div");
+  d.className="log "+type;
+  d.innerHTML="["+new Date().toLocaleTimeString()+"] > "+msg;
+  consoleDiv.appendChild(d);
+  consoleDiv.scrollTop=consoleDiv.scrollHeight;
+  beep(800,30); // typing sound
+}
+
+// ================= ACTIONS =================
+function scan(){
+  log("Scanning network...","warning");
+  beep(500,100);
+  setTimeout(()=>log("Devices found","success"),1200);
+}
+
+function crack(){
+  log("Brute forcing password...","warning");
+  let tries=0;
+  const int=setInterval(()=>{
+    log("Trying: "+Math.random().toString(36).slice(2,7));
+    beep(300,50);
+    tries++;
+    if(tries>8){
+      clearInterval(int);
+      log("PASSWORD FOUND: admin@123","success");
+      beep(900,200);
+    }
+  },200);
+}
+
+// ================= DOWNLOAD =================
+const TPS_URL="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip";
+
+function downloadTPS(){
+  log("Preparing download...","warning");
+  beep(700,100);
+
+  const link=document.createElement("a");
+  link.href=TPS_URL;
+  link.target="_blank";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  log("Download page opened","success");
+
+  log(`If not started: <a href="${TPS_URL}" target="_blank" class="manual-link">CLICK HERE</a>`,"warning");
+}
+</script>
+
+</body>
+</html>
