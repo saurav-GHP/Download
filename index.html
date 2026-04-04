@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hacker Suite Fixed</title>
+
+<style>
+body {
+  background: black;
+  color: #0f0;
+  font-family: monospace;
+}
+
+.console-panel {
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #0f0;
+  padding: 10px;
+}
+
+.log-line { margin: 4px 0; }
+.success { color: #0f0; }
+.warning { color: orange; }
+.error { color: red; }
+
+button {
+  padding: 10px;
+  margin: 10px;
+  background: black;
+  border: 1px solid #0f0;
+  color: #0f0;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Hacker Suite v4.1 (Download Fix)</h2>
+
+<div class="console-panel" id="consoleLogs"></div>
+
+<button id="downloadTpsBtn">DOWNLOAD TPS DEMO</button>
+
+<script>
+const TPS_URL = 'https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip';
+
+const consolePanel = document.getElementById('consoleLogs');
+
+function addLog(message, type = '') {
+  const logDiv = document.createElement('div');
+  logDiv.className = 'log-line ' + type;
+
+  const time = new Date().toLocaleTimeString();
+
+  // IMPORTANT: innerHTML (not innerText)
+  logDiv.innerHTML = `[${time}] > ${message}`;
+
+  consolePanel.appendChild(logDiv);
+  consolePanel.scrollTop = consolePanel.scrollHeight;
+}
+
+document.getElementById('downloadTpsBtn').addEventListener('click', () => {
+
+  addLog('⚠️ Preparing download...', 'warning');
+  addLog('📡 Connecting to GitHub...', '');
+
+  // Create link (best method)
+  const link = document.createElement('a');
+  link.href = TPS_URL;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  addLog('✅ Download page opened!', 'success');
+
+  // Manual fallback link (clickable)
+  addLog(`⚠️ If not started: <a href="${TPS_URL}" target="_blank">CLICK HERE</a>`, 'warning');
+});
+</script>
+
+</body>
+</html>
