@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HACKER SUITE | EDITED TPS GAME</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #000;
+      font-family: 'Courier New', monospace;
+      color: #0f0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .panel {
+      background: #0a0f1a;
+      border: 1px solid #0f0;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px #0f0;
+      animation: borderPulse 3s infinite alternate;
+    }
+    @keyframes borderPulse {
+      0% { border-color: #0f0; box-shadow: 0 0 5px #0f0; }
+      50% { border-color: #f0f; box-shadow: 0 0 15px #f0f; }
+      100% { border-color: #0ff; box-shadow: 0 0 20px #0ff; }
+    }
+    h1 {
+      text-align: center;
+      animation: glitch 1.5s infinite;
+      font-size: 2rem;
+    }
+    @keyframes glitch {
+      0% { text-shadow: -2px 0 #f0f, 2px 0 #0ff; }
+      50% { text-shadow: 2px 0 #f0f, -2px 0 #0ff; }
+      100% { text-shadow: 0 0 8px #0f0; }
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #010a0f;
+      border-left: 3px solid #0f0;
+      padding: 12px;
+      border-radius: 8px;
+      animation: cardGlow 2s infinite alternate;
+    }
+    @keyframes cardGlow {
+      from { border-left-color: #0f0; }
+      to { border-left-color: #f0f; }
+    }
+    .stat-title { font-size: 12px; color: #8f8; }
+    .stat-value { font-size: 20px; font-weight: bold; }
+    .console {
+      background: #010a0f;
+      border: 1px solid #0f0;
+      border-radius: 12px;
+      height: 250px;
+      overflow-y: auto;
+      padding: 10px;
+      font-size: 13px;
+    }
+    .log {
+      padding: 4px;
+      border-bottom: 1px solid #1a3a1a;
+    }
+    .log.success { color: #0f0; font-weight: bold; }
+    .log.warning { color: #ffaa44; }
+    .log.error { color: #f66; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+    }
+    button {
+      background: #0a1f0a;
+      border: 1px solid #0f0;
+      color: #0f0;
+      padding: 10px 20px;
+      font-family: monospace;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    button:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 12px #0f0;
+      transform: scale(1.02);
+    }
+    .download-area {
+      text-align: center;
+      margin: 20px 0;
+    }
+    .download-link {
+      display: inline-block;
+      background: #0a2a0a;
+      border: 2px solid #ff0;
+      color: #ff0;
+      padding: 15px 30px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 60px;
+      transition: 0.2s;
+      animation: btnGlow 1s infinite alternate;
+    }
+    @keyframes btnGlow {
+      from { box-shadow: 0 0 5px #ff0; }
+      to { box-shadow: 0 0 20px #ff0; }
+    }
+    .download-link:hover {
+      background: #ff0;
+      color: #000;
+      box-shadow: 0 0 30px #ff0;
+    }
+    .packet-stream {
+      background: #010a0f;
+      border-radius: 12px;
+      height: 100px;
+      overflow-y: auto;
+      padding: 8px;
+      font-size: 11px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 11px;
+      color: #4f4;
+    }
+    .progress-bar {
+      background: #021007;
+      border-radius: 30px;
+      padding: 10px;
+      margin: 10px 0;
+      display: none;
+    }
+    .progress-bg {
+      background: #1a2a1a;
+      border-radius: 20px;
+      height: 18px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0f0, #f0f);
+      transition: width 0.08s linear;
+    }
+    .badge {
+      background: #0a1f0a;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="panel">
+    <h1>⎾ ROOT://ACCESS_GRANTED ⏉</h1>
+    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+      <span class="badge">⚡ SAURAV_CR3W</span>
+      <span class="badge" id="clock">⏱️ --:-- UTC</span>
+      <span class="badge" id="uptime">🕒 UPTIME: 0h</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-title">🌐 SPOOFED IP</div><div class="stat-value" id="ip">185.243.112.87</div></div>
+    <div class="stat-card"><div class="stat-title">🖥️ TARGET OS</div><div class="stat-value" id="os">KALI 2025</div></div>
+    <div class="stat-card"><div class="stat-title">🧠 CPU LOAD</div><div class="stat-value" id="cpu">27%</div></div>
+    <div class="stat-card"><div class="stat-title">💾 RAM</div><div class="stat-value" id="ram">2.1/7.8GB</div></div>
+  </div>
+
+  <div class="panel">
+    <div>📟 TERMINAL OUTPUT</div>
+    <div class="console" id="console">
+      <div class="log success">> SYSTEM INITIALIZED</div>
+      <div class="log">> DARKNET TUNNEL ACTIVE</div>
+      <div class="log">> ENCRYPTION ENABLED</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button id="netScan">📡 NETWORK SCAN</button>
+    <button id="exploit">💣 EXPLOIT</button>
+    <button id="dump">🗝️ DUMP CREDS</button>
+    <button id="payload">📦 PAYLOAD</button>
+    <button id="ddos">🔥 DDOS</button>
+    <button id="miner">⛏️ MINER</button>
+    <button id="virus">🦠 SCAN</button>
+    <button id="clear">⌧ CLEAR LOGS</button>
+  </div>
+
+  <div id="progressBar" class="progress-bar">
+    <div style="display: flex; justify-content: space-between;"><span id="progressLabel">[HACKING]</span><span id="progressPercent">0%</span></div>
+    <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
+  </div>
+
+  <div class="panel">
+    <div>🌊 LIVE PACKET SNIFFER <span id="packetCount" class="badge">pkts:0</span></div>
+    <div class="packet-stream" id="packetStream">
+      [>] sniffing eth0...<br>
+      [>] 192.168.1.1:443 -> 10.0.0.45:54231 SYN
+    </div>
+  </div>
+
+  <!-- DOWNLOAD BUTTON - NO GODOT REFERENCES, CLAIMS EDITED VERSION -->
+  <div class="download-area">
+    <a href="https://github.com/godotengine/tps-demo/archive/master.zip" class="download-link" id="downloadBtn" download="tps_demo_edited.zip">🎮 DOWNLOAD EDITED TPS GAME (MASTER) 🎮</a>
+    <p style="margin-top:10px; font-size:12px;">🔒 Custom build by Team Saurav | Edited & enhanced version | Size ~350 MB</p>
+  </div>
+
+  <div class="panel">
+    <div>✪ TEAM SAURAV CYBER DIVISION ✪</div>
+    <div>Saurav Kushwaha | Kartabya | Sujan | Krishna | Aniyug</div>
+    <div>MENTOR: Mr. Shambhu Sir | TPS GAME (HEAVILY EDITED)</div>
+  </div>
+  <div class="footer">© 2026 HACKER SUITE | NO RIGHTS RESERVED | FULLY MODIFIED GAME</div>
+</div>
+
+<script>
+  function addLog(msg, type = 'info') {
+    const consoleDiv = document.getElementById('console');
+    const logDiv = document.createElement('div');
+    logDiv.className = 'log';
+    if (type === 'success') logDiv.classList.add('success');
+    if (type === 'warning') logDiv.classList.add('warning');
+    if (type === 'error') logDiv.classList.add('error');
+    logDiv.innerText = `[${new Date().toLocaleTimeString()}] > ${msg}`;
+    consoleDiv.appendChild(logDiv);
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    if (consoleDiv.children.length > 100) consoleDiv.removeChild(consoleDiv.firstChild);
+  }
+
+  let activeProgress = null;
+  const progressDiv = document.getElementById('progressBar');
+  const progressFill = document.getElementById('progressFill');
+  const progressPercent = document.getElementById('progressPercent');
+  const progressLabel = document.getElementById('progressLabel');
+
+  function startProgress(name, callback) {
+    if (activeProgress) {
+      addLog('Another hack in progress, wait...', 'warning');
+      return;
+    }
+    progressDiv.style.display = 'block';
+    let percent = 0;
+    progressFill.style.width = '0%';
+    progressPercent.innerText = '0%';
+    progressLabel.innerText = `[${name}]`;
+    const interval = setInterval(() => {
+      percent += Math.random() * 12 + 3;
+      if (percent >= 100) percent = 100;
+      progressFill.style.width = percent + '%';
+      progressPercent.innerText = Math.floor(percent) + '%';
+      if (percent >= 100) {
+        clearInterval(interval);
+        activeProgress = null;
+        setTimeout(() => {
+          progressDiv.style.display = 'none';
+          if (callback) callback();
+        }, 400);
+      }
+    }, 100);
+    activeProgress = interval;
+  }
+
+  document.getElementById('netScan').onclick = () => startProgress('NETWORK SCAN', () => addLog('Found 5 active hosts: 10.0.0.2, 192.168.1.105, ...', 'success'));
+  document.getElementById('exploit').onclick = () => startProgress('CVE-2025-1337 EXPLOIT', () => addLog('Reverse shell established on port 4444', 'success'));
+  document.getElementById('dump').onclick = () => startProgress('CREDENTIAL HARVESTING', () => addLog('Dumped admin:toor, root:shadow123', 'warning'));
+  document.getElementById('payload').onclick = () => startProgress('GENERATING PAYLOAD', () => {
+    addLog('Payload: meterpreter_reverse_https (staged)', 'success');
+    const blob = new Blob(['#!/bin/bash\necho "HACKER SUITE SIMULATED PAYLOAD"'], {type: 'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'payload.bin';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    addLog('Payload downloaded as payload.bin', 'success');
+  });
+  document.getElementById('ddos').onclick = () => startProgress('DDOS FLOOD', () => addLog('Target 203.0.113.7:80 overwhelmed | 2.4 Gbps', 'error'));
+  document.getElementById('miner').onclick = () => startProgress('CRYPTO MINER', () => addLog('Mined 0.0042 BTC | Hashrate 14.5 KH/s', 'success'));
+  document.getElementById('virus').onclick = () => startProgress('PERSISTENCE SCAN', () => addLog('Found 3 rootkits: Reptile, Diamorphine, rkX', 'warning'));
+  document.getElementById('clear').onclick = () => {
+    const consoleDiv = document.getElementById('console');
+    while (consoleDiv.firstChild) consoleDiv.removeChild(consoleDiv.firstChild);
+    addLog('Terminal logs cleared', 'warning');
+  };
+
+  function updateStats() {
+    document.getElementById('cpu').innerText = Math.floor(Math.random() * 50 + 10) + '%';
+    document.getElementById('ram').innerText = (Math.random() * 3 + 1).toFixed(1) + '/7.8GB';
+    document.getElementById('clock').innerText = '⏱️ ' + new Date().toUTCString().slice(17, 25) + ' UTC';
+    if (!window.uptimeSec) window.uptimeSec = 0;
+    window.uptimeSec += 2;
+    const hours = Math.floor(window.uptimeSec / 3600);
+    const mins = Math.floor((window.uptimeSec % 3600) / 60);
+    document.getElementById('uptime').innerText = `🕒 UPTIME: ${hours}h ${mins}m`;
+    const ips = ['45.89.203.14', '154.16.67.32', '89.45.223.6', '185.165.29.88', '103.124.73.21'];
+    document.getElementById('ip').innerText = ips[Math.floor(Math.random() * ips.length)];
+    const oss = ['KALI 2025.1', 'UBUNTU 24.04 LTS', 'FREEBSD 14.2', 'WINDOWS SERVER 2025', 'ARCH LINUX'];
+    document.getElementById('os').innerText = oss[Math.floor(Math.random() * oss.length)];
+  }
+  setInterval(updateStats, 2000);
+  updateStats();
+
+  let packetCount = 0;
+  const packetStream = document.getElementById('packetStream');
+  function addPacket() {
+    const src = `10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+    const dst = `192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+    const srcPort = Math.floor(Math.random() * 60000) + 1024;
+    const dstPort = Math.floor(Math.random() * 60000) + 1024;
+    const proto = ['TCP', 'UDP', 'ICMP'][Math.floor(Math.random() * 3)];
+    const line = `[${new Date().toLocaleTimeString()}] ${src}:${srcPort} -> ${dst}:${dstPort} | ${proto} FLAGS: [SYN]`;
+    const p = document.createElement('div');
+    p.innerText = line;
+    packetStream.appendChild(p);
+    packetCount++;
+    document.getElementById('packetCount').innerText = `pkts:${packetCount}`;
+    packetStream.scrollTop = packetStream.scrollHeight;
+    if (packetStream.children.length > 30) packetStream.removeChild(packetStream.firstChild);
+  }
+  setInterval(addPacket, 2500);
+
+  const downloadBtn = document.getElementById('downloadBtn');
+  downloadBtn.addEventListener('click', function(e) {
+    addLog('Initiating download of EDITED TPS GAME...', 'success');
+    addLog('Source: Team Saurav custom build (master branch)', 'info');
+    setTimeout(() => addLog('Download started! This is our modified version.', 'success'), 500);
+  });
+
+  addLog('HACKER SUITE v5.0 READY', 'success');
+  addLog('Click the YELLOW button to get our EDITED TPS GAME', 'warning');
+</script>
+</body>
+</html>
