@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⎾⏆⏉ HACKER SUITE v5.0 | DIRECT DOWNLOAD ⏆⏉⎿</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+    body {
+      background: radial-gradient(circle at 20% 30%, #0a0f1a, #020408);
+      font-family: 'Courier New', monospace;
+      min-height: 100vh;
+      color: #0f0;
+      position: relative;
+    }
+    #matrixCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .dashboard {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+    .glass-panel {
+      background: rgba(0, 8, 20, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 100, 0.5);
+      border-radius: 32px;
+      padding: 20px;
+      margin-bottom: 25px;
+      animation: rgbBorder 4s infinite alternate;
+    }
+    @keyframes rgbBorder {
+      0% { border-color: #0f0; box-shadow: 0 0 10px #0f0; }
+      33% { border-color: #f0f; box-shadow: 0 0 20px #f0f; }
+      66% { border-color: #0ff; box-shadow: 0 0 20px #0ff; }
+      100% { border-color: #ff0; box-shadow: 0 0 25px #ff0; }
+    }
+    .glitch-header {
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      animation: glitchRGB 1.5s infinite;
+    }
+    @keyframes glitchRGB {
+      0% { text-shadow: -2px -2px 0 #f0f, 2px 2px 0 #0ff; }
+      100% { text-shadow: 2px -2px 0 #0ff, -2px 2px 0 #f0f; }
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .stat-card {
+      background: rgba(0, 15, 25, 0.85);
+      border-left: 4px solid #0f0;
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .stat-title { font-size: 0.7rem; color: #8f8; }
+    .stat-value { font-size: 1.3rem; font-weight: bold; }
+    .console-panel {
+      background: #010a0f;
+      border: 1px solid #2aff6e;
+      border-radius: 20px;
+      height: 280px;
+      overflow-y: auto;
+      padding: 12px;
+      font-size: 0.8rem;
+    }
+    .log-line { padding: 4px 8px; border-bottom: 1px solid rgba(0,255,0,0.1); }
+    .log-line.success { color: #0f0; font-weight: bold; }
+    .log-line.warning { color: #ffaa44; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 20px 0;
+      justify-content: center;
+    }
+    .hack-btn {
+      background: rgba(0,20,10,0.9);
+      border: 1.5px solid #0f0;
+      color: #0f0;
+      padding: 10px 20px;
+      font-family: monospace;
+      font-weight: bold;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .hack-btn:hover {
+      background: #0f0;
+      color: #000;
+      box-shadow: 0 0 15px #0f0;
+    }
+    .progress-section {
+      background: #021007;
+      border-radius: 30px;
+      padding: 12px;
+      margin: 15px 0;
+      display: none;
+    }
+    .progress-bar-bg {
+      background: #1a2a1a;
+      border-radius: 20px;
+      height: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0f0, #f0f);
+      transition: width 0.08s linear;
+    }
+    .packet-stream {
+      background: #000c10;
+      padding: 10px;
+      border-radius: 16px;
+      height: 100px;
+      overflow-y: auto;
+      font-size: 0.7rem;
+    }
+    .badge {
+      background: #0a1f0a;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+    }
+    .direct-link {
+      display: inline-block;
+      background: #0a2a0a;
+      color: #ff0;
+      padding: 12px 24px;
+      border-radius: 40px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 15px;
+      border: 1px solid #ff0;
+      transition: 0.2s;
+    }
+    .direct-link:hover {
+      background: #ff0;
+      color: #000;
+      box-shadow: 0 0 20px #ff0;
+    }
+    .footer { text-align: center; margin-top: 30px; font-size: 0.7rem; color: #4f4; }
+  </style>
+</head>
+<body>
+
+<canvas id="matrixCanvas"></canvas>
+
+<div class="dashboard">
+  <div class="glass-panel">
+    <div class="glitch-header">⎾ ROOT://ACCESS_GRANTED ⏉</div>
+    <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+      <span class="badge">⚡ SAURAV_CR3W</span>
+      <span class="badge" id="liveClock">⏱️ --:--:-- UTC</span>
+      <span class="badge" id="uptimeStat">🕒 UPTIME: 0h</span>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-title">🌐 SPOOFED IP</div><div class="stat-value" id="fakeIP">185.243.112.87</div></div>
+    <div class="stat-card"><div class="stat-title">🖥️ TARGET OS</div><div class="stat-value" id="targetOS">KALI 2025.1</div></div>
+    <div class="stat-card"><div class="stat-title">🧠 CPU LOAD</div><div class="stat-value" id="cpuLoad">23%</div></div>
+    <div class="stat-card"><div class="stat-title">💾 RAM</div><div class="stat-value" id="ramLoad">1.4/7.8GB</div></div>
+  </div>
+
+  <div class="glass-panel">
+    <div>📟 [ TERMINAL ]</div>
+    <div class="console-panel" id="consoleLogs">
+      <div class="log-line success">> SYSTEM READY</div>
+      <div class="log-line">> TUNNEL ESTABLISHED</div>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <button class="hack-btn" id="netScanBtn">📡 NETWORK SCAN</button>
+    <button class="hack-btn" id="exploitBtn">💣 EXPLOIT</button>
+    <button class="hack-btn" id="dumpCredsBtn">🗝️ DUMP CREDS</button>
+    <button class="hack-btn" id="payloadBtn">📦 PAYLOAD</button>
+    <button class="hack-btn" id="ddosBtn">🔥 DDOS</button>
+    <button class="hack-btn" id="cryptoBtn">⛏️ MINER</button>
+    <button class="hack-btn" id="virusBtn">🦠 SCAN</button>
+    <button class="hack-btn" id="clearLogsBtn">⌧ CLEAR</button>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-section" id="progressContainer">
+    <div class="progress-label"><span id="progressActionText">[HACKING]</span> <span id="progressPercent">0%</span></div>
+    <div class="progress-bar-bg"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div class="glass-panel">
+    <div>🌊 LIVE PACKET SNIFFER <span class="badge" id="packetCount">pkts:0</span></div>
+    <div class="packet-stream" id="packetStream">[>] sniffing eth0...<br>[>] 192.168.1.1:443 -> 10.0.0.45:54231 SYN</div>
+  </div>
+
+  <!-- ========== THE FIX: DIRECT DOWNLOAD LINK ========== -->
+  <div class="glass-panel" style="text-align: center;">
+    <div style="font-size: 1.2rem; margin-bottom: 10px;">🎮 TPS DEMO DOWNLOAD</div>
+    <a href="https://github.com/godotengine/tps-demo/archive/90f2e38d7b5cf9e6fd0b788d0da1df4b84d49269.zip" class="direct-link" id="directDownloadLink" download="tps_demo.zip">⬇️ CLICK HERE TO DOWNLOAD TPS DEMO (ZIP) ⬇️</a>
+    <div style="margin-top: 10px; font-size: 0.7rem; color: #afa;">🔒 Secure GitHub mirror | Size: ~352 MB</div>
+  </div>
+
+  <div class="glass-panel">
+    <div>✪ TEAM SAURAV CYBER DIVISION ✪</div>
+    <div style="font-size: 0.7rem;">Saurav Kushwaha | Kartabya | Sujan | Krishna | Aniyug</div>
+    <div style="font-size: 0.65rem;">MENTOR: Mr. Shambhu Sir | TPS DEMO GAME</div>
+  </div>
+  <div class="footer">© 2026 HACKER SUITE | NO AUDIO | RGB EDITION</div>
+</div>
+
+<script>
+  // Matrix background
+  const canvas = document.getElementById('matrixCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const chars = "01";
+  const fontSize = 16;
+  let columns = Math.floor(canvas.width / fontSize);
+  let drops = new Array(columns).fill(1);
+  function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.04)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle = "#0f0";
+    ctx.font = fontSize + "px monospace";
+    for(let i=0;i<drops.length;i++) {
+      ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fontSize, drops[i]*fontSize);
+      if(drops[i]*fontSize > canvas.height && Math.random()>0.975) drops[i]=0;
+      drops[i]++;
+    }
+  }
+  setInterval(draw, 40);
+  window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    columns = Math.floor(canvas.width / fontSize);
+    drops = new Array(columns).fill(1);
+  });
+
+  // Live stats
+  function updateStats() {
+    document.getElementById('cpuLoad').innerText = Math.floor(Math.random()*50+10)+"%";
+    document.getElementById('ramLoad').innerText = (Math.random()*3+1).toFixed(1)+"/7.8GB";
+    document.getElementById('liveClock').innerText = "⏱️ "+new Date().toUTCString().slice(17,25)+" UTC";
+    if(!window.uptime) window.uptime=0;
+    window.uptime+=2;
+    document.getElementById('uptimeStat').innerText = `🕒 UPTIME: ${Math.floor(window.uptime/3600)}h ${Math.floor((window.uptime%3600)/60)}m`;
+    document.getElementById('fakeIP').innerText = ["45.89.203.14","154.16.67.32","89.45.223.6","185.165.29.88"][Math.floor(Math.random()*4)];
+    document.getElementById('targetOS').innerText = ["KALI 2025","UBUNTU 24.04","FREEBSD 14.2"][Math.floor(Math.random()*3)];
+  }
+  setInterval(updateStats, 2000);
+  updateStats();
+
+  // Packet sniffer
+  let pktCount=0;
+  const packetDiv = document.getElementById('packetStream');
+  function addPacket() {
+    const src = "10.0."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+    const dst = "192.168."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+    const line = `[${new Date().toLocaleTimeString()}] ${src}:${Math.floor(Math.random()*60000)} -> ${dst}:80 SYN`;
+    const p = document.createElement('div');
+    p.innerText = line;
+    packetDiv.appendChild(p);
+    pktCount++;
+    document.getElementById('packetCount').innerText = `pkts:${pktCount}`;
+    packetDiv.scrollTop = packetDiv.scrollHeight;
+    if(packetDiv.children.length>25) packetDiv.removeChild(packetDiv.firstChild);
+  }
+  setInterval(addPacket, 3000);
+
+  // Console logging
+  const consolePanel = document.getElementById('consoleLogs');
+  function addLog(msg, type='info') {
+    const div = document.createElement('div');
+    div.className = 'log-line';
+    if(type==='success') div.classList.add('success');
+    if(type==='warning') div.classList.add('warning');
+    div.innerText = `[${new Date().toLocaleTimeString()}] > ${msg}`;
+    consolePanel.appendChild(div);
+    consolePanel.scrollTop = consolePanel.scrollHeight;
+    if(consolePanel.children.length>100) consolePanel.removeChild(consolePanel.firstChild);
+  }
+
+  // Progress bar simulation
+  let activeInterval = null;
+  const progContainer = document.getElementById('progressContainer');
+  const progFill = document.getElementById('progressFill');
+  const progPercent = document.getElementById('progressPercent');
+  const progAction = document.getElementById('progressActionText');
+  function startProgress(name, callback) {
+    if(activeInterval) { addLog('Busy', 'warning'); return; }
+    progContainer.style.display = 'block';
+    let p=0;
+    progFill.style.width='0%';
+    progPercent.innerText='0%';
+    progAction.innerText=`[${name}]`;
+    const interval = setInterval(()=>{
+      p+=Math.random()*15+5;
+      if(p>=100) p=100;
+      progFill.style.width=p+'%';
+      progPercent.innerText=Math.floor(p)+'%';
+      if(p>=100){
+        clearInterval(interval);
+        activeInterval=null;
+        setTimeout(()=>{ progContainer.style.display='none'; if(callback) callback(); }, 400);
+      }
+    },100);
+    activeInterval=interval;
+  }
+
+  // Button actions
+  document.getElementById('netScanBtn').onclick = () => startProgress('NETWORK SCAN', ()=>addLog('Found 4 hosts', 'success'));
+  document.getElementById('exploitBtn').onclick = () => startProgress('EXPLOIT', ()=>addLog('Shell obtained', 'success'));
+  document.getElementById('dumpCredsBtn').onclick = () => startProgress('DUMP CREDS', ()=>addLog('Credentials extracted', 'warning'));
+  document.getElementById('payloadBtn').onclick = () => startProgress('PAYLOAD', ()=>addLog('Payload ready', 'success'));
+  document.getElementById('ddosBtn').onclick = () => startProgress('DDOS ATTACK', ()=>addLog('Target flooded', 'error'));
+  document.getElementById('cryptoBtn').onclick = () => startProgress('MINER', ()=>addLog('Mined 0.002 BTC', 'success'));
+  document.getElementById('virusBtn').onclick = () => startProgress('VIRUS SCAN', ()=>addLog('3 threats found', 'warning'));
+  document.getElementById('clearLogsBtn').onclick = () => { while(consolePanel.firstChild) consolePanel.removeChild(consolePanel.firstChild); addLog('Logs cleared', 'warning'); };
+
+  // The direct download link is already an <a> tag – it will work.
+  // Also add a console log to confirm
+  const downloadLink = document.getElementById('directDownloadLink');
+  downloadLink.addEventListener('click', () => {
+    addLog('Initiating TPS Demo download...', 'success');
+    // The browser will handle the rest
+  });
+  
+  addLog('HACKER SUITE v5.0 READY', 'success');
+  addLog('Use the DIRECT DOWNLOAD LINK above if button fails', 'warning');
+</script>
+</body>
+</html>
