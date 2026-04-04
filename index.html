@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HackerOS Boot</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: black;
+    color: #0f0;
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: column;
+  }
+  #bootScreen, #loginScreen {
+    display: none;
+    text-align: center;
+  }
+  #bootScreen.active, #loginScreen.active {
+    display: block;
+  }
+  input {
+    background: black;
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 5px;
+    margin: 5px;
+    font-family: monospace;
+  }
+  button {
+    background: black;
+    color: #0f0;
+    border: 1px solid #0f0;
+    padding: 5px 10px;
+    font-family: monospace;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0f0;
+    color: black;
+  }
+</style>
+</head>
+<body>
+
+<div id="bootScreen" class="active">
+  <div id="bootText"></div>
+</div>
+
+<div id="loginScreen">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="checkLogin()">Login</button>
+  <div id="loginMsg"></div>
+</div>
+
+<script>
+const bootLines = [
+  "Booting HackerOS...",
+  "Loading modules...",
+  "Initializing memory...",
+  "Bypassing security...",
+  "Access granted."
+];
+
+const bootText = document.getElementById("bootText");
+const bootScreen = document.getElementById("bootScreen");
+const loginScreen = document.getElementById("loginScreen");
+
+let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+// Simple beep sound
+function beep() {
+  const osc = audioCtx.createOscillator();
+  osc.type = "square";
+  osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+  const gainNode = audioCtx.createGain();
+  osc.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 0.1);
+}
+
+// Boot animation
+function boot() {
+  let i = 0;
+  bootScreen.classList.add("active");
+  const interval = setInterval(() => {
+    if(i < bootLines.length){
+      bootText.innerHTML += bootLines[i] + "<br>";
+      beep();
+      i++;
+    } else {
+      clearInterval(interval);
+      setTimeout(() => {
+        bootScreen.classList.remove("active");
+        loginScreen.classList.add("active");
+      }, 500);
+    }
+  }, 800);
+}
+
+// Wait for first user interaction (required for mobile)
+document.body.addEventListener("click", startBoot, { once: true });
+function startBoot() {
+  if (audioCtx.state === "suspended") {
+    audioCtx.resume();
+  }
+  boot();
+}
+
+// Login credentials
+const validUser = "Ghp";
+const validPass = "Saurav_9845451269";
+
+function checkLogin() {
+  const user = document.getElementById("username").value;
+  const pass = document.getElementById("password").value;
+  const msg = document.getElementById("loginMsg");
+
+  if(user === validUser && pass === validPass){
+    msg.style.color = "#0f0";
+    msg.innerHTML = "Login successful! Welcome!";
+  } else {
+    msg.style.color = "red";
+    msg.innerHTML = "Invalid username or password.";
+  }
+}
+</script>
+
+</body>
+</html>
